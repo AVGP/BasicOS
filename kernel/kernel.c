@@ -2,5 +2,6 @@
 
 void main() {
     clear();
+    install_idt();
     print("Hello");
 }
