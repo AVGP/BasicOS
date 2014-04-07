@@ -8,3 +8,11 @@ void memset(void *addr, unsigned char value, unsigned int len) {
         tmp++;
     }
 }
+
+void strncpy(char *dest, char *src, int max_len) {
+  int chars_copied = 0;
+  while(*src != 0 || chars_copied++ < max_len) {
+    *(dest++) = *(src++);
+  }
+  *dest = 0;
+}
