@@ -29,8 +29,9 @@ void set_isr(unsigned char int_num, unsigned long base, unsigned short sel, unsi
 }
 
 void install_idt() {
-    int idt_size = sizeof(struct idt_entry) * 256;
-    idtp.limit = idt_size - 1;
+    unsigned long idt_size = (sizeof(struct idt_entry) * 256) - 1;
+    idtp.limit = idt_size;
     idtp.base  = &idt;
-    memset((unsigned char *)&idt, 0, idt_size);
+    memset(&idt, 0, idt_size);
+    load_idt();
 }
