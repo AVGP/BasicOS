@@ -1,1 +1,1 @@
-void memset(unsigned char *addr, unsigned char value, unsigned int len);
+void memset(void *addr, unsigned char value, unsigned int len);
