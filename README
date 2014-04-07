@@ -1,2 +1,5 @@
-Purpose of BasicOS:
-With BasicOS, I want to try to build an object-oriented kernel for a small OS. Nothing huge, just a console and some basics.
+BasicOS
+=======
+
+Simple C kernel with a bootloader.
+Allows you to press keys and get them echoed back to screen.
