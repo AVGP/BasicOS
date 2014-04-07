@@ -3,5 +3,9 @@
 void main() {
     clear();
     install_idt();
-    print("Hello");
+    setup_isrs();
+
+    __asm__ __volatile__ ("sti");
+
+    print("Hello\n");
 }
