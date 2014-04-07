@@ -10,23 +10,23 @@ typedef struct registers
 
 unsigned char *exception_messages[] =
 {
-    "Divide by Zero you mustn't",
-    "They see me debugging, they interruptin'",
-    "We can't mask here, this is Interrupt country!",
-    "Breakpoint. Kthxbye.",
-    "Variables overflowing...",
-    "Out of Bounds, man.",
-    "Invalid Opcode. Speak the language of my people!",
+    "Divide by Zero you mustn't (Division By Zero)",
+    "They see me debugging, they interruptin' (Debugger exception)",
+    "We can't mask here, this is Interrupt country! (Non-maskable Interrupt)",
+    "Breakpoint. Kthxbye. (Breakpoint exception)",
+    "Variables overflowing... (Into detected overflow)",
+    "Out of Bounds, man. (Out of bounds)",
+    "Speak the language of my people! (Invalid opcode)",
     "No Coprocessor. You're alone here.",
 
     "Double Fault, double fun!",
-    "Coprocessor Segment Overrun (Run Coprocessor, run!)",
+    "Coprocessor.. what you doin'? Coprocessor.. stahp! (Coprocessor Segment Overrun)",
     "Bad TSS. Bad. Don't do that.",
     "Use segments they said, they'll be present they said.",
     "Stack Fault. Better clean up that mess.",
     "General Protection Fault orders: You shall not pass!",
     "Page Fault - try a bigger book.",
-    "I have no idea what you're interruptin' about...",
+    "I have no idea what you're interruptin' about... (Unknown interrupt)",
 
     "Coprocessor Fault. Not pointing any fingers, tho.",
     "Alignment Check - get your shit in line...",
