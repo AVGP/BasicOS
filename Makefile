@@ -11,7 +11,7 @@ clean:
 %.o: %.asm
 	nasm $< -f elf -o $@
 %.o: %.c ${HEADERS}
-	gcc -ffreestanding -o $@ -c $<
+	gcc -nostdlib -nostdinc -ffreestanding -o $@ -c $<
 %.bin: %.asm
 	nasm -I boot/ $< -f bin -o $@
 kernel.bin: boot/entry.o kernel/load_idt.o ${OBJ}
