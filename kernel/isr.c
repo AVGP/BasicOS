@@ -36,6 +36,23 @@ extern void isr29();
 extern void isr30();
 extern void isr31();
 
+extern void irq0();
+extern void irq1();
+extern void irq2();
+extern void irq3();
+extern void irq4();
+extern void irq5();
+extern void irq6();
+extern void irq7();
+extern void irq8();
+extern void irq9();
+extern void irq10();
+extern void irq11();
+extern void irq12();
+extern void irq13();
+extern void irq14();
+extern void irq15();
+
 typedef struct registers
 {
    unsigned long ds;                  // Data segment selector
@@ -82,6 +99,23 @@ void setup_isrs() {
     set_isr(31, (unsigned)isr31, 0x08, 0x8E);
 
     remap_pic();
+
+    set_isr(32, (unsigned)irq0,  0x08, 0x8E);
+    set_isr(33, (unsigned)irq1,  0x08, 0x8E);
+    set_isr(34, (unsigned)irq2,  0x08, 0x8E);
+    set_isr(35, (unsigned)irq3,  0x08, 0x8E);
+    set_isr(36, (unsigned)irq4,  0x08, 0x8E);
+    set_isr(37, (unsigned)irq5,  0x08, 0x8E);
+    set_isr(38, (unsigned)irq6,  0x08, 0x8E);
+    set_isr(39, (unsigned)irq7,  0x08, 0x8E);
+    set_isr(40, (unsigned)irq8,  0x08, 0x8E);
+    set_isr(41, (unsigned)irq9,  0x08, 0x8E);
+    set_isr(42, (unsigned)irq10, 0x08, 0x8E);
+    set_isr(43, (unsigned)irq11, 0x08, 0x8E);
+    set_isr(44, (unsigned)irq12, 0x08, 0x8E);
+    set_isr(45, (unsigned)irq13, 0x08, 0x8E);
+    set_isr(46, (unsigned)irq14, 0x08, 0x8E);
+    set_isr(47, (unsigned)irq15, 0x08, 0x8E);
 }
 
 void remap_pic() {
@@ -100,6 +134,27 @@ void remap_pic() {
     //Send ICW4 to the DATA ports
     port_byte_out(MASTER_DATA, PIC_ICW4m);
     port_byte_out(SLAVE_DATA,  PIC_ICW4s);
+
+    //Mask ALL the IRQs (except IRQ1 for the keyboard.)
+    port_byte_out(MASTER_DATA, 0xfd);
+    port_byte_out(SLAVE_DATA,  0xff);
+}
+
+void irq_handler(registers_t regs) {
+    char *msg = "IRQ: ??. ";
+    *(msg+6) = 48 + regs.int_no;
+    if(regs.int_no > 10) {
+        *(msg+5) = 'S';
+    }
+
+    print(msg);
+
+  //Did this come from the slave PIC?
+  if (regs.int_no >= 8) {
+      port_byte_out(SLAVE_COMMAND, PIC_EOI);
+  }
+
+    port_byte_out(MASTER_COMMAND, PIC_EOI);
 }
 
 void exception_handler(registers_t *regs) {
@@ -147,5 +202,7 @@ void exception_handler(registers_t *regs) {
         print(exception_messages[regs->int_no]);
         print("\nThat's an exception. System Halted! >:(");
         for (;;);
+    } else {
+      print("Weird exception @.@");
     }
 }
