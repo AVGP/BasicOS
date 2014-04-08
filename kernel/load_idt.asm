@@ -33,9 +33,27 @@
 [global isr31]
 [global isr32]
 
+[global irq0]
+[global irq1]
+[global irq2]
+[global irq3]
+[global irq4]
+[global irq5]
+[global irq6]
+[global irq7]
+[global irq8]
+[global irq9]
+[global irq10]
+[global irq11]
+[global irq12]
+[global irq13]
+[global irq14]
+[global irq15]
+
 
 [extern idtp]
 [extern exception_handler]
+[extern irq_handler]
 
 load_idt:
     lidt [idtp]
@@ -65,3 +83,27 @@ isr_common_stub:
     popa
     add esp, 8
     iret
+
+irq_common_stub:
+   pusha
+
+   mov ax, ds
+   push eax
+
+   mov ax, 0x10
+   mov ds, ax
+   mov es, ax
+   mov fs, ax
+   mov gs, ax
+
+   call irq_handler
+
+   pop ebx
+   mov ds, bx
+   mov es, bx
+   mov fs, bx
+   mov gs, bx
+
+   popa
+   add esp, 8
+   iret
