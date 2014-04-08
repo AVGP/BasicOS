@@ -1,6 +1,7 @@
-#include "screen.h"
 #include "isr.h"
 #include "port.h"
+
+void *irq_handlers[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 // I kinda miss the messy ways of interpreted languages here...
 extern void isr0();
@@ -127,23 +128,21 @@ void remap_pic() {
     port_byte_out(MASTER_DATA, PIC_ICW4m);
     port_byte_out(SLAVE_DATA,  PIC_ICW4s);
 
-    //Mask ALL the IRQs (except IRQ1 for the keyboard.)
-    port_byte_out(MASTER_DATA, 0xfd);
-    port_byte_out(SLAVE_DATA,  0xff);
+    //Unmask ALL the IRQs!
+    port_byte_out(MASTER_DATA, 0);
+    port_byte_out(SLAVE_DATA,  0);
 }
 
-void setup_irq_handler(int irq, void (*handler)(registers_t r)) {
+void setup_irq_handler(int irq, void (*handler)(registers_t *r)) {
   irq_handlers[irq] = handler;
 }
 
 void irq_handler(registers_t regs) {
-    char *msg = "IRQ: ??. ";
-    *(msg+6) = 48 + regs.int_no;
-    if(regs.int_no > 10) {
-        *(msg+5) = 'S';
-    }
+    void (*handler)(struct registers *r) = irq_handlers[regs.int_no];
 
-    print(msg);
+    if(handler != 0) {
+      handler(&regs);
+    }
 
     //Did this come from the slave PIC?
     if (regs.int_no >= 8) {
