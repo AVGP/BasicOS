@@ -215,3 +215,119 @@ isr31:
     push byte 0
     push byte 31
     jmp isr_common_stub
+
+;
+; IRQ trampolines
+;
+
+; 32: IRQ0
+irq0:
+    cli
+    push byte 0
+    push byte 0
+    jmp irq_common_stub
+
+; 33: IRQ1
+irq1:
+    cli
+    push byte 0
+    push byte 1
+    jmp irq_common_stub
+
+; 34: IRQ2
+irq2:
+    cli
+    push byte 0
+    push byte 2
+    jmp irq_common_stub
+
+; 35: IRQ3
+irq3:
+    cli
+    push byte 0
+    push byte 3
+    jmp irq_common_stub
+
+; 36: IRQ4
+irq4:
+    cli
+    push byte 0
+    push byte 4
+    jmp irq_common_stub
+
+; 37: IRQ5
+irq5:
+    cli
+    push byte 0
+    push byte 5
+    jmp irq_common_stub
+
+; 38: IRQ6
+irq6:
+    cli
+    push byte 0
+    push byte 6
+    jmp irq_common_stub
+
+; 39: IRQ7
+irq7:
+    cli
+    push byte 0
+    push byte 7
+    jmp irq_common_stub
+
+; 40: IRQ8
+irq8:
+    cli
+    push byte 0
+    push byte 8
+    jmp irq_common_stub
+
+; 41: IRQ9
+irq9:
+    cli
+    push byte 0
+    push byte 9
+    jmp irq_common_stub
+
+; 42: IRQ10
+irq10:
+    cli
+    push byte 0
+    push byte 10
+    jmp irq_common_stub
+
+; 43: IRQ11
+irq11:
+    cli
+    push byte 0
+    push byte 11
+    jmp irq_common_stub
+
+; 44: IRQ12
+irq12:
+    cli
+    push byte 0
+    push byte 12
+    jmp irq_common_stub
+
+; 45: IRQ13
+irq13:
+    cli
+    push byte 0
+    push byte 13
+    jmp irq_common_stub
+
+; 46: IRQ14
+irq14:
+    cli
+    push byte 0
+    push byte 14
+    jmp irq_common_stub
+
+; 47: IRQ15
+irq15:
+    cli
+    push byte 0
+    push byte 15
+    jmp irq_common_stub
