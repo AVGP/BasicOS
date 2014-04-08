@@ -53,14 +53,6 @@ extern void irq13();
 extern void irq14();
 extern void irq15();
 
-typedef struct registers
-{
-   unsigned long ds;                  // Data segment selector
-   unsigned long edi, esi, ebp, esp, ebx, edx, ecx, eax; // Pushed by pusha.
-   unsigned long int_no, err_code;    // Interrupt number and error code (if applicable)
-   unsigned long eip, cs, eflags, useresp, ss; // Pushed by the processor automatically.
-} registers_t;
-
 void setup_isrs() {
     set_isr(0, (unsigned)isr0, 0x08, 0x8E);
     set_isr(1, (unsigned)isr1, 0x08, 0x8E);
@@ -140,6 +132,10 @@ void remap_pic() {
     port_byte_out(SLAVE_DATA,  0xff);
 }
 
+void setup_irq_handler(int irq, void (*handler)(registers_t r)) {
+  irq_handlers[irq] = handler;
+}
+
 void irq_handler(registers_t regs) {
     char *msg = "IRQ: ??. ";
     *(msg+6) = 48 + regs.int_no;
@@ -149,10 +145,10 @@ void irq_handler(registers_t regs) {
 
     print(msg);
 
-  //Did this come from the slave PIC?
-  if (regs.int_no >= 8) {
-      port_byte_out(SLAVE_COMMAND, PIC_EOI);
-  }
+    //Did this come from the slave PIC?
+    if (regs.int_no >= 8) {
+        port_byte_out(SLAVE_COMMAND, PIC_EOI);
+    }
 
     port_byte_out(MASTER_COMMAND, PIC_EOI);
 }

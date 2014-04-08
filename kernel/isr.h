@@ -25,4 +25,19 @@
 #define PIC_ICW4s     0x1  // (hi) 0000 no special mode
                            // (lo) 0001 no buffering, master?, auto EOI?, 8086 mode?
 
+void *irq_handlers[16] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+
+typedef struct registers {
+    unsigned long ds;                  // Data segment selector
+    unsigned long edi, esi, ebp, esp, ebx, edx, ecx, eax; // Pushed by pusha.
+    unsigned long int_no, err_code;    // Interrupt number and error code (if any)
+    unsigned long eip, cs, eflags, useresp, ss; // Pushed by the processor.
+} registers_t;
+
+void setup_isrs();
+void remap_pic();
+void irq_handler(registers_t regs);
+void exception_handler(registers_t *regs);
+void setup_irq_handler(int irq, void (*handler)(registers_t r));
+
 #endif
