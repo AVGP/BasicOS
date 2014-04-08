@@ -1,29 +1,6 @@
 #include "screen.h"
-
-
-#define PIC_MASTER		0x20
-#define PIC_SLAVE	 	0xA0
-#define MASTER_COMMAND	PIC_MASTER
-#define MASTER_DATA	  (PIC_MASTER+1)
-#define SLAVE_COMMAND	PIC_SLAVE
-#define SLAVE_DATA	  (PIC_SLAVE+1)
-
-#define PIC_EOI       0x20
-
-// Initialization word (setup)
-#define PIC_ICW1      0x11 // (hi) 0001b ICW1 marker
-                           // (lo) 0001b is for edge-triggered, master/slave with ICW4
-                           // ICW2 is used to point to the offset in the IDT for this IRQ.
-
-// Tell the master where the slave is connected & vice versa
-#define PIC_ICW3m     0x4  // That's Interrupt Line 2 on master
-#define PIC_ICW3s     0x2  // That's Interrupt Line 1 on slave
-
-// Some more settings for the PIC
-#define PIC_ICW4m     0x5  // (hi) 0000 no special mode
-                           // (lo) 0101 no buffering, master?, auto EOI?, 8086 mode?
-#define PIC_ICW4m     0x1  // (hi) 0000 no special mode
-                           // (lo) 0001 no buffering, master?, auto EOI?, 8086 mode?
+#include "isr.h"
+#include "port.h"
 
 // I kinda miss the messy ways of interpreted languages here...
 extern void isr0();
@@ -109,20 +86,20 @@ void setup_isrs() {
 
 void remap_pic() {
     //Send ICW1 to the CMD ports
-    port_byte_out(MASTER_COMMAND, ICW1)
-    port_byte_out(SLAVE_COMMAND,  ICW1)
+    port_byte_out(MASTER_COMMAND, PIC_ICW1);
+    port_byte_out(SLAVE_COMMAND,  PIC_ICW1);
 
     //Send ICW2 to the DATA ports
-    port_byte_out(MASTER_DATA, 0x20) //IRQ0  = IDT #32
-    port_byte_out(SLAVE_DATA,  0x28) //IRQ8  = IDT #40
+    port_byte_out(MASTER_DATA, 0x20); //IRQ0  = IDT #32
+    port_byte_out(SLAVE_DATA,  0x28); //IRQ8  = IDT #40
 
     //Send ICW3 to the DATA ports
-    port_byte_out(MASTER_DATA, ICW3m)
-    port_byte_out(SLAVE_DATA,  ICW3s)
+    port_byte_out(MASTER_DATA, PIC_ICW3m);
+    port_byte_out(SLAVE_DATA,  PIC_ICW3s);
 
     //Send ICW4 to the DATA ports
-    port_byte_out(MASTER_DATA, ICW4m)
-    port_byte_out(SLAVE_DATA,  ICW4s)
+    port_byte_out(MASTER_DATA, PIC_ICW4m);
+    port_byte_out(SLAVE_DATA,  PIC_ICW4s);
 }
 
 void exception_handler(registers_t *regs) {
