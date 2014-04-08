@@ -13,5 +13,6 @@
 
 void clear();
 void setCursor(int col, int row);
+void printChar(unsigned char c);
 void print(unsigned char *msg);
 #endif

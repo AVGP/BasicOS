@@ -22,10 +22,19 @@ void clear() {
 }
 
 void printChar(unsigned char c) {
-  unsigned char *video_memory = (unsigned char *)VIDEO_BASE;
-  *(video_memory + (cursorY * COLS + cursorX) * 2)     = c;
-  *(video_memory + (cursorY * COLS + cursorY) * 2 + 1) = DEFAULT_STYLE;
-  cursorX++;
+
+  if(c < ' ') {
+    if(c == '\n') {
+      cursorX = 0;
+      cursorY++;
+    }
+  } else {
+    unsigned char *video_memory = (unsigned char *)VIDEO_BASE;
+    *(video_memory + (cursorY * COLS + cursorX) * 2)     = c;
+    *(video_memory + (cursorY * COLS + cursorY) * 2 + 1) = DEFAULT_STYLE;
+    cursorX++;
+  }
+  setCursor(cursorX, cursorY);
 }
 
 void print(unsigned char *msg) {
